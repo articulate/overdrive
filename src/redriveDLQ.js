@@ -1,5 +1,5 @@
 const { Consumer } = require('sqs-consumer')
-const { green, yellow } = require('chalk')
+const { gray, green } = require('chalk')
 const progress = require('@articulate/progress')()
 const { promisify, rename } = require('@articulate/funky')
 
@@ -25,7 +25,7 @@ const redriveDLQ = opts => dlq =>
     const total = Number(ApproximateNumberOfMessages)
 
     if (total) {
-      console.log(yellow(`\nRedriving ${total} messages...`))
+      console.log(gray(`\nRedriving ${total} messages...`))
     } else {
       return resolve(green('\nDLQ is already empty.\n'))
     }
