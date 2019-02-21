@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-const chalk = require('chalk')
 const program = require('commander')
+const { red } = require('chalk')
 
 const { version } = require('../package')
 
@@ -15,12 +15,12 @@ program
 const { queueUrl, timeout } = program
 
 if (!queueUrl) {
-  console.error(chalk.red('error: the following arguments are required: --queue-url'))
+  console.error(red('error: the following argument is required: --queue-url'))
   process.exit(1)
 }
 
 if(!/^https:\/\//.test(queueUrl)) {
-  console.error(chalk.red(`error: ${queueUrl} is not a valid --queue-url`))
+  console.error(red(`error: ${queueUrl} is not a valid --queue-url`))
   process.exit(1)
 }
 

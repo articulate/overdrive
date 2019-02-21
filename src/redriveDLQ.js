@@ -1,5 +1,5 @@
-const chalk = require('chalk')
 const { Consumer } = require('sqs-consumer')
+const { green, yellow } = require('chalk')
 const progress = require('@articulate/progress')()
 const { promisify, rename } = require('@articulate/funky')
 
@@ -25,9 +25,9 @@ const redriveDLQ = opts => dlq =>
     const total = Number(ApproximateNumberOfMessages)
 
     if (total) {
-      console.log(chalk.yellow(`\nRedriving ${total} messages...`))
+      console.log(yellow(`\nRedriving ${total} messages...`))
     } else {
-      return resolve(chalk.green('\nDLQ is already empty.\n'))
+      return resolve(green('\nDLQ is already empty.\n'))
     }
 
     const cleanAttributes =
@@ -36,7 +36,7 @@ const redriveDLQ = opts => dlq =>
     const finish = err => {
       consumer.stop()
       clearTimeout(timer)
-      err ? reject(err) : resolve(chalk.green('\nDone.\n'))
+      err ? reject(err) : resolve(green('\nDone.\n'))
     }
 
     const increment = () => {
