@@ -1,6 +1,6 @@
 {
   "name": "overdrive",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Redrive dead-letter messages back into an SQS queue.",
   "bin": "src/cli.js",
   "main": "src/overdrive.js",
