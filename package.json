@@ -1,0 +1,25 @@
+{
+  "name": "overdrive",
+  "version": "0.0.0",
+  "description": "Redrive dead-letter messages back into an SQS queue.",
+  "bin": "src/cli.js",
+  "main": "src/overdrive.js",
+  "repository": "git@github.com:articulate/overdrive.git",
+  "author": "articulate",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@articulate/funky": "^1.6.0",
+    "@articulate/progress": "^0.0.1",
+    "aws-sdk": "2.x",
+    "chalk": "^2.4.2",
+    "commander": "^2.19.0",
+    "ramda": "^0.26.1",
+    "sqs-consumer": "^5.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.14.1"
+  }
+}
