@@ -1,10 +1,10 @@
 # overdrive
 
-Redrive dead-letter messages back into an SQS queue.
+Redrive messages from a dead-letter queue (DLQ) back onto an SQS queue.
 
 - [Usage](#usage)
-- [Requirements](#requirements)
 - [How it works](#how-it-works)
+- [Requirements](#requirements)
 
 ## Usage
 
@@ -33,58 +33,43 @@ A common way to run commands like this is to include it as an `npm` script in yo
 
 Then execute it with `npm sqs:redrive`.
 
+## How it works
+
+1. When you specify the main queue, `overdrive` will first query the queue attributes to parse the redrive-policy and obtain the DLQ url.
+
+1. Next it will drain the DLQ and push all of the dead-letter messages back onto the original queue.
+
+1. It ensures both the `MessageBody` and `MessageAttributes` are resent.
+
 ## Requirements
 
-To perform each of the following tasks, the box you run this on must have at minimum the corresponding IAM statements:
+When you do any work with SQS queues, you've got to have your `AWS_REGION` on hand, and that still applies here.
 
-#### Draining the DLQ
-
-```json
-{
-  "Effect": "Allow",
-  "Action": [
-    "sqs:ReceiveMessage",
-    "sqs:DeleteMessage"
-  ],
-  "Resource": "${dead_letter_queue.arn}"
-}
-```
-
-#### Reading from an encrypted DLQ
+In addition, you'll need to get your IAM statements in order.  Specific requirements will vary on your use-case, but assuming you've got one queue with a DLQ and both are encrypted with KMS, then your IAM statements should look something like this:
 
 ```json
-{
+[{
   "Effect": "Allow",
   "Action": [
-    "kms:Decrypt"
+    "kms:Decrypt",
+    "kms:GenerateDataKey"
   ],
   "Resource": "${kms_key.arn}"
-}
-```
-
-#### Redriving back to the main queue
-
-```json
-{
+}, {
   "Effect": "Allow",
   "Action": [
+    "sqs:DeleteMessage",
+    "sqs:GetQueueAttributes",
+    "sqs:ReceiveMessage",
     "sqs:SendMessage"
   ],
   "Resource": "${queue.arn}"
-}
-```
-
-#### Writing to an encrypted main queue
-
-```json
-{
+}, {
   "Effect": "Allow",
   "Action": [
-    "kms:GenerateDataKey",
-    "kms:Decrypt"
+    "sqs:DeleteMessage",
+    "sqs:ReceiveMessage"
   ],
-  "Resource": "${kms_key.arn}"
-}
+  "Resource": "${dead_letter_queue.arn}"
+}]
 ```
-
-## How it works
