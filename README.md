@@ -31,7 +31,13 @@ A common way to run commands like this is to include it as an `npm` script in yo
 }
 ```
 
-Then execute it with `npm sqs:redrive`.
+Then execute it with `npm sqs:redrive`.  You should see animated output similar to the following:
+
+```
+Redriving 295 messages...
+progress: ⣀ [========================] 100%
+Done.
+```
 
 ## How it works
 
@@ -68,6 +74,8 @@ In addition, you'll need to get your IAM statements in order.  Specific requirem
   "Effect": "Allow",
   "Action": [
     "sqs:DeleteMessage",
+    "sqs:GetQueueAttributes",
+    "sqs:GetQueueUrl",
     "sqs:ReceiveMessage"
   ],
   "Resource": "${dead_letter_queue.arn}"
