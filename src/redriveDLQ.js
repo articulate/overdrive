@@ -2,12 +2,16 @@ const { Consumer } = require('sqs-consumer')
 const { gray, green } = require('chalk')
 const progress = require('@articulate/progress')()
 const { promisify, rename } = require('@articulate/funky')
+const throat = require('throat')
 
 const {
   assoc, evolve, map, omit, pick, pipe, pipeP
 } = require('ramda')
 
 const sqs = require('./sqs')
+
+const sendMessage =
+  throat(16, promisify(sqs.sendMessage, sqs))
 
 const redriveDLQ = opts => dlq =>
   new Promise((resolve, reject) => {
@@ -51,7 +55,7 @@ const redriveDLQ = opts => dlq =>
         evolve({ MessageAttributes: cleanAttributes }),
         assoc('QueueUrl', qUrl),
         pipeP(
-          promisify(sqs.sendMessage, sqs),
+          sendMessage,
           increment
         )
       )

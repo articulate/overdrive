@@ -17,7 +17,8 @@
     "chalk": "^2.4.2",
     "commander": "^2.19.0",
     "ramda": "^0.26.1",
-    "sqs-consumer": "^5.0.0"
+    "sqs-consumer": "^5.0.0",
+    "throat": "^4.1.0"
   },
   "devDependencies": {
     "eslint": "^5.14.1"
